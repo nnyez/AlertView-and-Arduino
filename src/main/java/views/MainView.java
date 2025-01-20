@@ -33,7 +33,7 @@ public class MainView extends javax.swing.JFrame {
     }
 
     public JPanel getFiltersPanel() {
-        return filtersPanel;
+        return filterPanel;
     }
 
     public JButton getClearBtn() {
@@ -63,10 +63,11 @@ public class MainView extends javax.swing.JFrame {
         dataPanel = new javax.swing.JPanel();
         scrollPanel = new javax.swing.JScrollPane();
         dataTable = new javax.swing.JTable();
-        filtersPanel = new javax.swing.JPanel();
+        filtersContainer = new javax.swing.JPanel();
         auxPanel = new javax.swing.JPanel();
         executeBtn = new javax.swing.JButton();
         clearBtn = new javax.swing.JButton();
+        filterPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -142,8 +143,8 @@ public class MainView extends javax.swing.JFrame {
 
         dataPanel.add(scrollPanel, java.awt.BorderLayout.CENTER);
 
-        filtersPanel.setPreferredSize(new java.awt.Dimension(700, 200));
-        filtersPanel.setLayout(new java.awt.BorderLayout());
+        filtersContainer.setPreferredSize(new java.awt.Dimension(700, 200));
+        filtersContainer.setLayout(new java.awt.BorderLayout());
 
         auxPanel.setPreferredSize(new java.awt.Dimension(700, 40));
         auxPanel.setRequestFocusEnabled(false);
@@ -174,9 +175,12 @@ public class MainView extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        filtersPanel.add(auxPanel, java.awt.BorderLayout.SOUTH);
+        filtersContainer.add(auxPanel, java.awt.BorderLayout.SOUTH);
 
-        dataPanel.add(filtersPanel, java.awt.BorderLayout.PAGE_START);
+        filterPanel.setLayout(new java.awt.BorderLayout());
+        filtersContainer.add(filterPanel, java.awt.BorderLayout.CENTER);
+
+        dataPanel.add(filtersContainer, java.awt.BorderLayout.PAGE_START);
 
         getContentPane().add(dataPanel, java.awt.BorderLayout.CENTER);
 
@@ -195,9 +199,10 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JPanel dataPanel;
     private javax.swing.JTable dataTable;
     private javax.swing.JButton executeBtn;
+    private javax.swing.JPanel filterPanel;
+    private javax.swing.JPanel filtersContainer;
     private javax.swing.JComboBox<String> filtersOptionsCB;
     private javax.swing.JPanel filtersOptionsPanel;
-    private javax.swing.JPanel filtersPanel;
     private javax.swing.JLabel lbAlert;
     private javax.swing.JLabel lbFilter;
     private javax.swing.JPanel menuPanel;

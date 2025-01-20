@@ -1,10 +1,10 @@
 repositories\AlertRepository.class
 models\AlertPassword.class
+models\User.class
+models\AlertCard.class
+views\MainView.class
 controllers\ConnectionController.class
 controllers\MainController.class
 models\panels\SearchFilter.class
-models\User.class
 views\panels\SearchFilterPanel.class
-models\AlertCard.class
 models\panels\IFilterPanel.class
-views\MainView.class

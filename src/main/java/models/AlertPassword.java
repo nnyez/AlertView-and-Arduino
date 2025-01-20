@@ -18,16 +18,45 @@ public class AlertPassword {
     private String alertLevel;
     private LocalTime hour;
     private LocalDate date;
-    private String card_code;
+    private String password;
     private byte attempt;
 
-    public AlertPassword(int alertId, String description, String alertLevel, LocalTime hour, LocalDate date, String card_code, byte attempt) {
+    public AlertPassword(int alertId, String description, String alertLevel, LocalTime hour, LocalDate date, String password, byte attempt) {
         this.alertId = alertId;
         this.description = description;
         this.alertLevel = alertLevel;
         this.hour = hour;
         this.date = date;
-        this.card_code = card_code;
+        this.password = password;
         this.attempt = attempt;
     }
+
+    public int getAlertId() {
+        return alertId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getAlertLevel() {
+        return alertLevel;
+    }
+
+    public LocalTime getHour() {
+        return hour;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public byte getAttempt() {
+        return attempt;
+    }
+
 }

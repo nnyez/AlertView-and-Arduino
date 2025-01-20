@@ -4,15 +4,21 @@
  */
 package repositories;
 
+import com.mysql.cj.jdbc.PreparedStatementWrapper;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
-import models.AlertCard;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.AlertPassword;
+import models.AlertCard;
 
 /**
  *
@@ -30,7 +36,32 @@ public class AlertRepository {
 
     //PASSWORD
     public List<AlertPassword> getPassAlerts() {
-        return null;
+        ResultSet resultSet = null;
+        List<AlertPassword> result = new ArrayList<>();
+
+        try {
+            resultSet = st.executeQuery("SELECT * FROM alerts_pass;");
+
+            if (resultSet == null) {
+                return result;
+            }
+            while (resultSet.next()) {
+                String description = resultSet.getString("description");
+                String alertLevel = resultSet.getString("alert_level");
+                String hour = resultSet.getString("hour");
+                String date = resultSet.getString("date");
+                String password = resultSet.getString("password");
+                byte attempt = resultSet.getByte("attempt");
+                int id = resultSet.getInt("alert_pass_id");
+
+                result.add(new AlertPassword(id, description, alertLevel, LocalTime.parse(hour), LocalDate.parse(date), password, attempt));
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
     }
 
     public List<AlertPassword> getPassAlertsDatePeriod(LocalDate start, LocalDate end) {
@@ -43,7 +74,32 @@ public class AlertRepository {
 
     //CARDS
     public List<AlertCard> getCardAlerts() {
-        return null;
+        ResultSet resultSet = null;
+        List<AlertCard> result = new ArrayList<>();
+
+        try {
+            resultSet = st.executeQuery("SELECT * FROM alerts_card;");
+
+            if (resultSet == null) {
+                return result;
+            }
+            while (resultSet.next()) {
+                String description = resultSet.getString("description");
+                String alertLevel = resultSet.getString("alert_level");
+                String hour = resultSet.getString("hour");
+                String date = resultSet.getString("date");
+                String code = resultSet.getString("card_code");
+                byte attempt = resultSet.getByte("attempt");
+                int id = resultSet.getInt("alert_card_id");
+
+                result.add(new AlertCard(id, description, alertLevel, LocalTime.parse(hour), LocalDate.parse(date), code, attempt));
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
     }
 
     public List<AlertCard> getCardAlertsTimePeriod(LocalTime start, LocalTime end) {
@@ -54,9 +110,36 @@ public class AlertRepository {
         return null;
     }
 
-    public List<AlertCard> getCardAlertsSearch(String chars){
-        return null;
+    public List<AlertCard> getCardAlertsSearch(String chars) {
+        ResultSet resultSet = null;
+        List<AlertCard> result = new ArrayList<>();
+
+        try {
+            PreparedStatement prepare = con.prepareStatement("SELECT * FROM alerts_card WHERE card_code like ?;");
+            prepare.setString(1, "" + chars + "%");
+
+            resultSet = prepare.executeQuery();
+
+            if (resultSet == null) {
+                return result;
+            }
+            while (resultSet.next()) {
+                String description = resultSet.getString("description");
+                String alertLevel = resultSet.getString("alert_level");
+                String hour = resultSet.getString("hour");
+                String date = resultSet.getString("date");
+                String code = resultSet.getString("card_code");
+                byte attempt = resultSet.getByte("attempt");
+                int id = resultSet.getInt("alert_card_id");
+
+                result.add(new AlertCard(id, description, alertLevel, LocalTime.parse(hour), LocalDate.parse(date), code, attempt));
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
     }
-    
-    
+
 }

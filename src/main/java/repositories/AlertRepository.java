@@ -5,6 +5,7 @@
 package repositories;
 
 import com.mysql.cj.jdbc.PreparedStatementWrapper;
+import controllers.Mapper;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -36,7 +37,7 @@ public class AlertRepository {
 
     //PASSWORD
     public List<AlertPassword> getPassAlerts() {
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         List<AlertPassword> result = new ArrayList<>();
 
         try {
@@ -45,18 +46,8 @@ public class AlertRepository {
             if (resultSet == null) {
                 return result;
             }
-            while (resultSet.next()) {
-                String description = resultSet.getString("description");
-                String alertLevel = resultSet.getString("alert_level");
-                String hour = resultSet.getString("hour");
-                String date = resultSet.getString("date");
-                String password = resultSet.getString("password");
-                byte attempt = resultSet.getByte("attempt");
-                int id = resultSet.getInt("alert_pass_id");
 
-                result.add(new AlertPassword(id, description, alertLevel, LocalTime.parse(hour), LocalDate.parse(date), password, attempt));
-
-            }
+            result = Mapper.getDataToPass(resultSet);
         } catch (SQLException ex) {
             Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -74,7 +65,7 @@ public class AlertRepository {
 
     //CARDS
     public List<AlertCard> getCardAlerts() {
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         List<AlertCard> result = new ArrayList<>();
 
         try {
@@ -83,18 +74,7 @@ public class AlertRepository {
             if (resultSet == null) {
                 return result;
             }
-            while (resultSet.next()) {
-                String description = resultSet.getString("description");
-                String alertLevel = resultSet.getString("alert_level");
-                String hour = resultSet.getString("hour");
-                String date = resultSet.getString("date");
-                String code = resultSet.getString("card_code");
-                byte attempt = resultSet.getByte("attempt");
-                int id = resultSet.getInt("alert_card_id");
-
-                result.add(new AlertCard(id, description, alertLevel, LocalTime.parse(hour), LocalDate.parse(date), code, attempt));
-
-            }
+            result = Mapper.getDataToCard(resultSet);
         } catch (SQLException ex) {
             Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -111,11 +91,11 @@ public class AlertRepository {
     }
 
     public List<AlertCard> getCardAlertsSearch(String chars) {
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         List<AlertCard> result = new ArrayList<>();
 
         try {
-            PreparedStatement prepare = con.prepareStatement("SELECT * FROM alerts_card WHERE card_code like ?;");
+            PreparedStatement prepare = con.prepareStatement("SELECT * FROM alerts_card  WHERE BINARY card_code like ?;");
             prepare.setString(1, "" + chars + "%");
 
             resultSet = prepare.executeQuery();
@@ -123,18 +103,7 @@ public class AlertRepository {
             if (resultSet == null) {
                 return result;
             }
-            while (resultSet.next()) {
-                String description = resultSet.getString("description");
-                String alertLevel = resultSet.getString("alert_level");
-                String hour = resultSet.getString("hour");
-                String date = resultSet.getString("date");
-                String code = resultSet.getString("card_code");
-                byte attempt = resultSet.getByte("attempt");
-                int id = resultSet.getInt("alert_card_id");
-
-                result.add(new AlertCard(id, description, alertLevel, LocalTime.parse(hour), LocalDate.parse(date), code, attempt));
-
-            }
+            result = Mapper.getDataToCard(resultSet);
         } catch (SQLException ex) {
             Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
         }

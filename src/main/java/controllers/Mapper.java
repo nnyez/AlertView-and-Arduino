@@ -4,6 +4,11 @@
  */
 package controllers;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
@@ -43,6 +48,26 @@ public class Mapper {
         }
     }
 
+    public static List<AlertPassword> getDataToPass(ResultSet set) throws SQLException {
+        List<AlertPassword> result = new ArrayList<>();
+        while (set.next()) {
+            result.add(dataToPass(set));
+        }
+        return result;
+    }
+
+    private static AlertPassword dataToPass(ResultSet set) throws SQLException {
+        String description = set.getString("description");
+        String alertLevel = set.getString("alert_level");
+        String hour = set.getString("hour");
+        String date = set.getString("date");
+        String password = set.getString("password");
+        byte attempt = set.getByte("attempt");
+        int id = set.getInt("alert_pass_id");
+
+        return new AlertPassword(id, description, alertLevel, LocalTime.parse(hour), LocalDate.parse(date), password, attempt);
+    }
+
     public static DefaultTableModel getPassTableModel() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Id");
@@ -69,4 +94,25 @@ public class Mapper {
             model.addRow(data);
         }
     }
+
+    public static List<AlertCard> getDataToCard(ResultSet set) throws SQLException {
+        List<AlertCard> result = new ArrayList<>();
+        while (set.next()) {
+            result.add(dataToCard(set));
+        }
+        return result;
+    }
+
+    private static AlertCard dataToCard(ResultSet set) throws SQLException {
+        String description = set.getString("description");
+        String alertLevel = set.getString("alert_level");
+        String hour = set.getString("hour");
+        String date = set.getString("date");
+        String code = set.getString("card_code");
+        byte attempt = set.getByte("attempt");
+        int id = set.getInt("alert_card_id");
+
+        return new AlertCard(id, description, alertLevel, LocalTime.parse(hour), LocalDate.parse(date), code, attempt);
+    }
+
 }

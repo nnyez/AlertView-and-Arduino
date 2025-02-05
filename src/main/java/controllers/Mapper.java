@@ -21,7 +21,8 @@ import models.AlertPassword;
  */
 public class Mapper {
 
-    public static DefaultTableModel getCardTableModel() {
+    //Obtener plantilla para la visualizacion en la tabla sobre AlertCards
+    public static DefaultTableModel getTableCardModel() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Id");
         model.addColumn("Descripción");
@@ -30,9 +31,11 @@ public class Mapper {
         model.addColumn("Fecha");
         model.addColumn("Tarjeta ID");
         model.addColumn("Intento");
+
         return model;
     }
 
+    //Insertar valores desde una lista de AlertCard al modelo de una tabla
     public static void insertDataToModelCard(DefaultTableModel model, List<AlertCard> l) {
         for (AlertCard alertPassword : l) {
             Vector<String> data = new Vector<>();
@@ -48,26 +51,29 @@ public class Mapper {
         }
     }
 
-    public static List<AlertPassword> getDataToPass(ResultSet set) throws SQLException {
-        List<AlertPassword> result = new ArrayList<>();
+    //Inserto el resultado de una consulta en una lista AlertCard
+    public static List<AlertCard> getDataToCard(ResultSet set) throws SQLException {
+        List<AlertCard> result = new ArrayList<>();
         while (set.next()) {
-            result.add(dataToPass(set));
+            result.add(dataToCard(set));
         }
         return result;
     }
 
-    private static AlertPassword dataToPass(ResultSet set) throws SQLException {
+    //Inserta los valores de la consulta en un modelo AlertCard
+    private static AlertCard dataToCard(ResultSet set) throws SQLException {
         String description = set.getString("description");
         String alertLevel = set.getString("alert_level");
         String hour = set.getString("hour");
         String date = set.getString("date");
-        String password = set.getString("password");
+        String code = set.getString("card_code");
         byte attempt = set.getByte("attempt");
-        int id = set.getInt("alert_pass_id");
+        int id = set.getInt("alert_card_id");
 
-        return new AlertPassword(id, description, alertLevel, LocalTime.parse(hour), LocalDate.parse(date), password, attempt);
+        return new AlertCard(id, description, alertLevel, LocalTime.parse(hour), LocalDate.parse(date), code, attempt);
     }
 
+    //Obtener plantilla para la visualizacion en la tabla sobre AlertPass
     public static DefaultTableModel getPassTableModel() {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Id");
@@ -81,6 +87,7 @@ public class Mapper {
         return model;
     }
 
+    //Insertar valores desde una lista de AlertPass al modelo de una tabla
     public static void insertDataToModelPass(DefaultTableModel model, List<AlertPassword> l) {
         for (AlertPassword alertPassword : l) {
             Vector<String> data = new Vector<>();
@@ -95,24 +102,26 @@ public class Mapper {
         }
     }
 
-    public static List<AlertCard> getDataToCard(ResultSet set) throws SQLException {
-        List<AlertCard> result = new ArrayList<>();
+    //Inserto el resultado de una consulta en una lista AlertPass
+    public static List<AlertPassword> dataToModelPass(ResultSet set) throws SQLException {
+        List<AlertPassword> result = new ArrayList<>();
         while (set.next()) {
-            result.add(dataToCard(set));
+            result.add(dataToPass(set));
         }
         return result;
     }
 
-    private static AlertCard dataToCard(ResultSet set) throws SQLException {
+    //Inserta los valores de la consulta en un modelo AlertPass
+    private static AlertPassword dataToPass(ResultSet set) throws SQLException {
         String description = set.getString("description");
         String alertLevel = set.getString("alert_level");
         String hour = set.getString("hour");
         String date = set.getString("date");
-        String code = set.getString("card_code");
+        String password = set.getString("password");
         byte attempt = set.getByte("attempt");
-        int id = set.getInt("alert_card_id");
+        int id = set.getInt("alert_pass_id");
 
-        return new AlertCard(id, description, alertLevel, LocalTime.parse(hour), LocalDate.parse(date), code, attempt);
+        return new AlertPassword(id, description, alertLevel, LocalTime.parse(hour), LocalDate.parse(date), password, attempt);
     }
 
 }

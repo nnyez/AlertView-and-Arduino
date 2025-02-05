@@ -8,6 +8,6 @@ package controllers;
  *
  * @author geova
  */
-public class ConnectionController extends Thread{
-    //Todo el codigo referente a la escucha y escritura de datos con Arduino
+public class DriverController {
+    
 }

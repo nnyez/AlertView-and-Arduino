@@ -20,6 +20,7 @@ import views.panels.SearchFilterPanel;
  *
  * @author geova
  */
+//Modelo filtro de busqueda en AlertCard
 public class SearchFilter implements IFilterPanel {
     
     private SearchFilterPanel panel;
@@ -35,11 +36,11 @@ public class SearchFilter implements IFilterPanel {
     //consulta
     @Override
     public Collection<AlertCard> execute(JTable table, AlertRepository repository) {
-        String searchSrt = panel.getTxtSearch().getText();
+        String searchSrt = panel.getTxtSearch().getText();//Obtengo los caracteres a buscar
         
-        List<AlertCard> l = repository.getCardAlertsSearch(searchSrt);
+        List<AlertCard> l = repository.getCardAlertsSearch(searchSrt);//
         
-        DefaultTableModel model = Mapper.getCardTableModel();
+        DefaultTableModel model = Mapper.getTableCardModel();
         Mapper.insertDataToModelCard(model, l);
         
         table.setModel(model);

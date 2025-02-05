@@ -4,7 +4,6 @@
  */
 package repositories;
 
-import com.mysql.cj.jdbc.PreparedStatementWrapper;
 import controllers.Mapper;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -27,12 +26,14 @@ import models.AlertCard;
  */
 public class AlertRepository {
 
-    Connection con = null;
-    Statement st;
+    private final String strConn = "jdbc:mysql://localhost:3306/autalert";
 
-    public AlertRepository(String conStr) throws SQLException {
-        this.con = DriverManager.getConnection(conStr, "root", "admin");
-        this.st = con.createStatement();
+    private Connection conn = null;
+    private Statement st;
+
+    public AlertRepository() throws SQLException {
+        this.conn = DriverManager.getConnection(strConn, "root", "admin");
+        this.st = conn.createStatement();
     }
 
     //PASSWORD
@@ -47,7 +48,7 @@ public class AlertRepository {
                 return result;
             }
 
-            result = Mapper.getDataToPass(resultSet);
+            result = Mapper.dataToModelPass(resultSet);
         } catch (SQLException ex) {
             Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -95,7 +96,7 @@ public class AlertRepository {
         List<AlertCard> result = new ArrayList<>();
 
         try {
-            PreparedStatement prepare = con.prepareStatement("SELECT * FROM alerts_card  WHERE BINARY card_code like ?;");
+            PreparedStatement prepare = conn.prepareStatement("SELECT * FROM alerts_card  WHERE BINARY card_code like ?;");
             prepare.setString(1, "" + chars + "%");
 
             resultSet = prepare.executeQuery();

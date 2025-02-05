@@ -13,6 +13,7 @@ import repositories.AlertRepository;
  *
  * @author geova
  */
+//Interfaz que implementa el filtro para mantener la abstraccion
 public interface IFilterPanel {
     //Metodo que limpiara los datos en los campos de los filtros
     void clear();
@@ -20,6 +21,7 @@ public interface IFilterPanel {
     //Metodo que obtendra los datos y lo enviara a la tabla
     <T> Collection<T> execute(JTable table, AlertRepository repository);
 
+    //Obterngo el panel
     JPanel getPanel();
 
 }

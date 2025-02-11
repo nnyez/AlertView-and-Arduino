@@ -28,15 +28,15 @@ public class AlertRepository {
 
     private final String strConn = "jdbc:mysql://localhost:3306/autalert";
 
-    private Connection conn = null;
-    private Statement st;
+    private final Connection conn;
+    private final Statement st;
 
     public AlertRepository() throws SQLException {
         this.conn = DriverManager.getConnection(strConn, "root", "admin");
         this.st = conn.createStatement();
     }
 
-    //PASSWORD
+    //PASSWORD----------------------
     public List<AlertPassword> getPassAlerts() {
         ResultSet resultSet;
         List<AlertPassword> result = new ArrayList<>();
@@ -64,7 +64,11 @@ public class AlertRepository {
         return null;
     }
 
-    //CARDS
+    public boolean insertAlertPass(AlertPassword pass) {
+        return false;
+    }
+
+    //CARDS--------------------
     public List<AlertCard> getCardAlerts() {
         ResultSet resultSet;
         List<AlertCard> result = new ArrayList<>();
@@ -112,4 +116,7 @@ public class AlertRepository {
         return result;
     }
 
+    public boolean insertAlertCard(AlertCard pass) {
+        return false;
+    }
 }

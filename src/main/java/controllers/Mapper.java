@@ -51,27 +51,27 @@ public class Mapper {
         }
     }
 
-    //Inserto el resultado de una consulta en una lista AlertCard
-    public static List<AlertCard> getDataToCard(ResultSet set) throws SQLException {
-        List<AlertCard> result = new ArrayList<>();
-        while (set.next()) {
-            result.add(dataToCard(set));
+        //Inserto el resultado de una consulta en una lista AlertCard
+        public static List<AlertCard> getDataToCard(ResultSet set) throws SQLException {
+            List<AlertCard> result = new ArrayList<>();
+            while (set.next()) {
+                result.add(dataToCard(set));
+            }
+            return result;
         }
-        return result;
-    }
 
-    //Inserta los valores de la consulta en un modelo AlertCard
-    private static AlertCard dataToCard(ResultSet set) throws SQLException {
-        String description = set.getString("description");
-        String alertLevel = set.getString("alert_level");
-        String hour = set.getString("hour");
-        String date = set.getString("date");
-        String code = set.getString("card_code");
-        byte attempt = set.getByte("attempt");
-        int id = set.getInt("alert_card_id");
+        //Inserta los valores de la consulta en un modelo AlertCard
+        private static AlertCard dataToCard(ResultSet set) throws SQLException {
+            String description = set.getString("description");
+            String alertLevel = set.getString("alert_level");
+            String hour = set.getString("hour");
+            String date = set.getString("date");
+            String code = set.getString("card_code");
+            byte attempt = set.getByte("attempt");
+            int id = set.getInt("alert_card_id");
 
-        return new AlertCard(id, description, alertLevel, LocalTime.parse(hour), LocalDate.parse(date), code, attempt);
-    }
+            return new AlertCard(id, description, alertLevel, LocalTime.parse(hour), LocalDate.parse(date), code, attempt);
+        }
 
     //Obtener plantilla para la visualizacion en la tabla sobre AlertPass
     public static DefaultTableModel getPassTableModel() {

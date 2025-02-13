@@ -52,7 +52,7 @@ public class Mapper {
     }
 
         //Inserto el resultado de una consulta en una lista AlertCard
-        public static List<AlertCard> getDataToCard(ResultSet set) throws SQLException {
+        public static List<AlertCard> dataToModelCard(ResultSet set) throws SQLException {
             List<AlertCard> result = new ArrayList<>();
             while (set.next()) {
                 result.add(dataToCard(set));

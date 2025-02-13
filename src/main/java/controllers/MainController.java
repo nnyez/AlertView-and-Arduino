@@ -17,10 +17,18 @@ import javax.swing.table.DefaultTableModel;
 import jssc.SerialPortException;
 import models.AlertCard;
 import models.AlertPassword;
+import models.panels.AlertNivel;
+import models.panels.AttemptFilter;
+import models.panels.HourFilter;
 import models.panels.IFilterPanel;
+import models.panels.SearchDate;
 import models.panels.SearchFilter;
 import repositories.AlertRepository;
 import views.MainView;
+import views.panels.AlertLevelPanel;
+import views.panels.AttemptPanel;
+import views.panels.FiltreDatePanel;
+import views.panels.HourFilterpPanel;
 import views.panels.SearchFilterPanel;
 
 /**
@@ -33,7 +41,7 @@ public class MainController {
 
     private AlertRepository repository;
 
-    //Modelo de filtro actual
+    // Modelo de filtro actual
     private IFilterPanel actually;
 
     // Datos para los combobox, intercambiar los datos en vez de crear un CB nuevo
@@ -44,7 +52,8 @@ public class MainController {
     // Mapa donde esta los modelos con cada panel correspondientes para cada filtro
     private HashMap<String, IFilterPanel> filtersPanels = new HashMap<>();
 
-    //Inicializo todos las clases necesarias y llamo a los metodos para iniciar la APP
+    // Inicializo todos las clases necesarias y llamo a los metodos para iniciar la
+    // APP
     public MainController(MainView view, AlertRepository repository) {
         this.view = view;
         this.repository = repository;
@@ -56,8 +65,8 @@ public class MainController {
         view.setVisible(true);
     }
 
-    //Agrega las opciones del combobox, cada lista corresponde a las opciones 
-    //A su vez son las keys para seleccionar el panel del filtro
+    // Agrega las opciones del combobox, cada lista corresponde a las opciones
+    // A su vez son las keys para seleccionar el panel del filtro
     public void initData() {
         // Datos posibles a filtrar
         cbData.add("Alertas por Contraseña");
@@ -90,10 +99,22 @@ public class MainController {
         IFilterPanel searchPanel = new SearchFilter(new SearchFilterPanel());
         filtersPanels.put("Busqueda ID", searchPanel);
 
+        IFilterPanel searchDate = new SearchDate(new FiltreDatePanel());
+        filtersPanels.put("Rango de Fechas", searchDate);
+
+        IFilterPanel alertLevel = new AlertNivel(new AlertLevelPanel());
+        filtersPanels.put("Nivel de Alerta", alertLevel);
+
+        IFilterPanel attemptpanel = new AttemptFilter(new AttemptPanel());
+        filtersPanels.put("Numero de Intentos", attemptpanel);
+
+        IFilterPanel hourPanel = new HourFilter(new HourFilterpPanel());
+        filtersPanels.put("Rango de Horas", hourPanel);
+
     }
 
     // Inicializacion de ActionsCommads de la interfaz
-    //Union Interfaz Controlador 
+    // Union Interfaz Controlador
     public void initActions() {
 
         view.getDataOptionsCB().addActionListener(e -> dataOptionsCB(e));
@@ -104,7 +125,7 @@ public class MainController {
         view.getClearBtn().addActionListener(e -> clear());
     }
 
-    //Llamo al metodo limpiar de cada panel de filtro
+    // Llamo al metodo limpiar de cada panel de filtro
     private void clear() {
         if (actually == null) {
             return;
@@ -112,11 +133,11 @@ public class MainController {
         actually.clear();
     }
 
-    //Ejecuta la consulta del filtro seleccionado
+    // Ejecuta la consulta del filtro seleccionado
     private void execute() {
-        //Limpia los datos de la tabla
+        // Limpia los datos de la tabla
         view.getDataTable().removeAll();
-        //Si no existe un filtro seleccionado ejecuta una consulta general
+        // Si no existe un filtro seleccionado ejecuta una consulta general
         if (actually == null) {
             if (view.getDataOptionsCB().getSelectedItem() == "Alertas por Contraseña") {
                 executePass();
@@ -130,7 +151,7 @@ public class MainController {
         refresh();
     }
 
-    //Consulta * Alertas Pass
+    // Consulta * Alertas Pass
     private void executePass() {
         List<AlertPassword> l = repository.getPassAlerts();
 
@@ -140,7 +161,7 @@ public class MainController {
         refresh();
     }
 
-    //Consulta * Alertas Card
+    // Consulta * Alertas Card
     private void executeCard() {
         List<AlertCard> l = repository.getCardAlerts();
         DefaultTableModel model = Mapper.getTableCardModel();
@@ -152,7 +173,7 @@ public class MainController {
         refresh();
     }
 
-    //Ingresa las opciones en el cb de filtros
+    // Ingresa las opciones en el cb de filtros
     private void dataOptionsCB(ActionEvent e) {
 
         if (view.getDataOptionsCB().getSelectedItem() == "Alertas por Contraseña") {
@@ -172,7 +193,7 @@ public class MainController {
         refresh();
     }
 
-    //Actualiza la vista con el panel segun el filtro seleccionado
+    // Actualiza la vista con el panel segun el filtro seleccionado
     private void filterOptionsCB(ActionEvent e) {
         actually = filtersPanels.get(view.getFiltersOptionsCB().getSelectedItem());
 
@@ -188,7 +209,7 @@ public class MainController {
         refresh();
     }
 
-    //Actualizo la vista
+    // Actualizo la vista
     private void refresh() {
         view.repaint();
         view.revalidate();

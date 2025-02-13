@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -36,7 +37,7 @@ public class AlertRepository {
         this.st = conn.createStatement();
     }
 
-    //PASSWORD----------------------
+    // PASSWORD----------------------
     public List<AlertPassword> getPassAlerts() {
         ResultSet resultSet;
         List<AlertPassword> result = new ArrayList<>();
@@ -57,18 +58,54 @@ public class AlertRepository {
     }
 
     public List<AlertPassword> getPassAlertsDatePeriod(LocalDate start, LocalDate end) {
-        return null;
+
+        ResultSet resultSet;
+        List<AlertPassword> result = new ArrayList<>();
+
+        String sql = "SELECT * FROM alerts_pass WHERE date BETWEEN ? AND ?;";
+
+        try (PreparedStatement prepare = conn.prepareStatement(sql)) {
+            prepare.setDate(1, java.sql.Date.valueOf(start));
+            prepare.setDate(2, java.sql.Date.valueOf(end));
+
+            resultSet = prepare.executeQuery();
+            if (resultSet == null) {
+                return result;
+            }
+
+            result = Mapper.dataToModelPass(resultSet);
+        } catch (SQLException ex) {
+            Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
     }
 
     public List<AlertPassword> getPassAlertsAttempt(byte attempt) {
-        return null;
+        ResultSet resulset;
+        List<AlertPassword> result = new ArrayList<>();
+        try {
+
+            PreparedStatement selection = conn.prepareStatement("SELECT * FROM alerts_pass WHERE attempt = ?;");
+            selection.setByte(1, attempt);
+            resulset = selection.executeQuery();
+
+            if (resulset == null) {
+                return result;
+            }
+            result = Mapper.dataToModelPass(resulset);
+            System.out.println(attempt);
+        } catch (SQLException ex) {
+            Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
     }
 
     public boolean insertAlertPass(AlertPassword pass) {
         return false;
     }
 
-    //CARDS--------------------
+    // CARDS--------------------
     public List<AlertCard> getCardAlerts() {
         ResultSet resultSet;
         List<AlertCard> result = new ArrayList<>();
@@ -79,7 +116,7 @@ public class AlertRepository {
             if (resultSet == null) {
                 return result;
             }
-            result = Mapper.getDataToCard(resultSet);
+            result = Mapper.dataToModelCard(resultSet);
         } catch (SQLException ex) {
             Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -88,11 +125,42 @@ public class AlertRepository {
     }
 
     public List<AlertCard> getCardAlertsTimePeriod(LocalTime start, LocalTime end) {
-        return null;
+        ResultSet resulSet;
+        List<AlertCard> result = new ArrayList<>();
+        try {
+            PreparedStatement prepa = conn.prepareStatement("SELECT * FROM alerts_card WHERE hour BETWEEN ? AND ?");
+            prepa.setString(1, start.format(DateTimeFormatter.ofPattern("HH:mm")));
+            prepa.setString(2, end.format(DateTimeFormatter.ofPattern("HH:mm")));
+
+            resulSet = prepa.executeQuery();
+            if (resulSet == null) {
+                return result;
+            }
+            result = Mapper.dataToModelCard(resulSet);
+        } catch (SQLException ex) {
+            Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
     }
 
     public List<AlertCard> getCardAlertsAlertLevel(String level) {
-        return null;
+        ResultSet resultSet;
+        List<AlertCard> result = new ArrayList<>();
+
+        try {
+            PreparedStatement pas = conn.prepareStatement("SELECT * FROM alerts_card where alert_level = ?; ");
+            pas.setString(1, level);
+            resultSet = pas.executeQuery();
+
+            if (resultSet == null) {
+                return result;
+            }
+            result = Mapper.dataToModelCard(resultSet);
+        } catch (SQLException ex) {
+            Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
     }
 
     public List<AlertCard> getCardAlertsSearch(String chars) {
@@ -100,7 +168,8 @@ public class AlertRepository {
         List<AlertCard> result = new ArrayList<>();
 
         try {
-            PreparedStatement prepare = conn.prepareStatement("SELECT * FROM alerts_card  WHERE BINARY card_code like ?;");
+            PreparedStatement prepare = conn
+                    .prepareStatement("SELECT * FROM alerts_card  WHERE BINARY card_code like ?;");
             prepare.setString(1, "" + chars + "%");
 
             resultSet = prepare.executeQuery();
@@ -108,7 +177,7 @@ public class AlertRepository {
             if (resultSet == null) {
                 return result;
             }
-            result = Mapper.getDataToCard(resultSet);
+            result = Mapper.dataToModelCard(resultSet);
         } catch (SQLException ex) {
             Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
         }

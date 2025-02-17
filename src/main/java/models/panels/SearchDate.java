@@ -6,14 +6,12 @@ package models.panels;
 
 import controllers.Mapper;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import models.AlertCard;
 import models.AlertPassword;
 import repositories.AlertRepository;
 import views.panels.FiltreDatePanel;
@@ -22,7 +20,7 @@ import views.panels.FiltreDatePanel;
  *
  * @author Fr4nk
  */
-public class SearchDate implements IFilterPanel {
+public class SearchDate implements IFilterPanel<AlertPassword> {
 
     private FiltreDatePanel panel;
 

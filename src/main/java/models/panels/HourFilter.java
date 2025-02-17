@@ -5,8 +5,6 @@
 package models.panels;
 
 import java.time.LocalTime;
-import java.time.LocalDate;
-
 import java.util.Collection;
 import java.util.List;
 import javax.swing.JPanel;
@@ -27,7 +25,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author LENOVO
  */
-public class HourFilter implements IFilterPanel {
+public class HourFilter implements IFilterPanel<AlertCard> {
 
     private HourFilterpPanel panel;
 

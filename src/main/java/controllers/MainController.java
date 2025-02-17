@@ -97,19 +97,19 @@ public class MainController {
 
         // Tomar en cuenta los registros agregado en cbCard y cbPass
         // Cada item sera la clave del mapa para cada panel
-        IFilterPanel searchPanel = new SearchFilter(new SearchFilterPanel());
+        IFilterPanel<AlertCard> searchPanel = new SearchFilter(new SearchFilterPanel());
         filtersPanels.put("Busqueda ID", searchPanel);
 
-        IFilterPanel searchDate = new SearchDate(new FiltreDatePanel());
+        IFilterPanel<AlertPassword> searchDate = new SearchDate(new FiltreDatePanel());
         filtersPanels.put("Rango de Fechas", searchDate);
 
-        IFilterPanel alertLevel = new AlertNivel(new AlertLevelPanel());
+        IFilterPanel<AlertCard> alertLevel = new AlertNivel(new AlertLevelPanel());
         filtersPanels.put("Nivel de Alerta", alertLevel);
 
-        IFilterPanel attemptpanel = new AttemptFilter(new AttemptPanel());
+        IFilterPanel<AlertPassword> attemptpanel = new AttemptFilter(new AttemptPanel());
         filtersPanels.put("Numero de Intentos", attemptpanel);
 
-        IFilterPanel hourPanel = new HourFilter(new HourFilterpPanel());
+        IFilterPanel<AlertCard> hourPanel = new HourFilter(new HourFilterpPanel());
         filtersPanels.put("Rango de Horas", hourPanel);
 
     }
@@ -121,13 +121,13 @@ public class MainController {
         view.getDataOptionsCB().addActionListener(e -> dataOptionsCB(e));
         view.getFiltersOptionsCB().addActionListener(e -> filterOptionsCB(e));
 
-        view.getExecuteBtn().addActionListener(e -> execute());
+        view.getExecuteBtn().addActionListener(e -> execute(e));
 
-        view.getClearBtn().addActionListener(e -> clear());
+        view.getClearBtn().addActionListener(e -> clear(e));
     }
 
     // Llamo al metodo limpiar de cada panel de filtro
-    private void clear() {
+    private void clear(ActionEvent e) {
         if (actually == null) {
             return;
         }
@@ -135,7 +135,7 @@ public class MainController {
     }
 
     // Ejecuta la consulta del filtro seleccionado
-    private void execute() {
+    private void execute(ActionEvent e) {
         // Limpia los datos de la tabla
         view.getDataTable().removeAll();
         // Si no existe un filtro seleccionado ejecuta una consulta general
@@ -220,7 +220,7 @@ public class MainController {
         AlertRepository repository = new AlertRepository();
         MailAddressRepository mailRepository = new MailAddressRepository();
         new ConRXTX(repository, mailRepository);
-        new MainController(new MainView(),repository);
+        new MainController(new MainView(), repository);
     }
 
 }

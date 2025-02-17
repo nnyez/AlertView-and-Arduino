@@ -6,7 +6,6 @@ package controllers;
 
 import com.panamahitek.ArduinoException;
 import com.panamahitek.PanamaHitek_Arduino;
-import com.panamahitek.PanamaHitek_DataBuffer;
 import com.panamahitek.PanamaHitek_MultiMessage;
 import java.time.LocalDate;
 import java.time.LocalTime;

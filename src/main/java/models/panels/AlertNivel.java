@@ -19,7 +19,7 @@ import views.panels.AlertLevelPanel;
  *
  * @author joser
  */
-public class AlertNivel implements IFilterPanel{
+public class AlertNivel implements IFilterPanel<AlertCard>{
   private AlertLevelPanel level;
     
     public AlertNivel(AlertLevelPanel level) {

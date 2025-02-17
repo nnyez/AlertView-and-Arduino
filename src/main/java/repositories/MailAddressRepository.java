@@ -28,7 +28,6 @@ public class MailAddressRepository {
     private Properties props = new Properties();
     private final Session mailSession;
     private final String originEmail = "nnyezg@gmail.com";
-    private final String originPass = "ubhz jxds rztk vdqw";
 
     public MailAddressRepository() {
 
@@ -36,7 +35,7 @@ public class MailAddressRepository {
         final String password = "ubhzjxdsrztkvdqw";
 
         System.out.println("TLSEmail Start");
-        Properties props = new Properties();
+        props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         props.setProperty("mail.smtp.starttls.enable", "true");

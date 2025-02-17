@@ -18,7 +18,7 @@ import views.panels.AttemptPanel;
  *
  * @author LENOVO
  */
-public class AttemptFilter implements IFilterPanel {
+public class AttemptFilter implements IFilterPanel<AlertPassword> {
     
     private AttemptPanel attempt;
 

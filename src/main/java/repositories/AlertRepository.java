@@ -6,20 +6,24 @@ package repositories;
 
 import controllers.Mapper;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.AlertPassword;
 import models.AlertCard;
+import models.User;
 
 /**
  *
@@ -102,6 +106,22 @@ public class AlertRepository {
     }
 
     public boolean insertAlertPass(AlertPassword pass) {
+        try {
+            PreparedStatement prepare = conn
+                    .prepareStatement(
+                            "INSERT INTO alerts_pass (description,alert_level,hour,date,password,attempt) VALUES(?,?,?,?,?,?);");
+            prepare.setString(1, pass.getDescription());
+            prepare.setString(2, pass.getAlertLevel());
+            prepare.setTime(3, Time.valueOf(pass.getHour()));
+            prepare.setDate(4, Date.valueOf(pass.getDate()));
+            prepare.setString(5, pass.getPassword());
+            prepare.setByte(6, pass.getAttempt());
+            prepare.executeUpdate();
+
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return false;
     }
 
@@ -186,6 +206,61 @@ public class AlertRepository {
     }
 
     public boolean insertAlertCard(AlertCard pass) {
+        try {
+            PreparedStatement prepare = conn
+                    .prepareStatement(
+                            "INSERT INTO alerts_card (description,alert_level,hour,date,card_code,attempt) VALUES(?,?,?,?,?,?);");
+            prepare.setString(1, pass.getDescription());
+            prepare.setString(2, pass.getAlertLevel());
+            prepare.setTime(3, Time.valueOf(pass.getHour()));
+            prepare.setDate(4, Date.valueOf(pass.getDate()));
+            prepare.setString(5, pass.getCard_code());
+            prepare.setByte(6, pass.getAttempt());
+
+            prepare.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return false;
+
+    }
+
+    public List<User> getUsers() {
+        ResultSet resultSet;
+        List<User> result = new ArrayList<>();
+
+        try {
+            resultSet = st.executeQuery("SELECT * FROM users;");
+
+            if (resultSet == null) {
+                return result;
+            }
+            result = Mapper.dataToModelUser(resultSet);
+        } catch (SQLException ex) {
+            Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
+    }
+
+    public List<User> getUser(int id) {
+        ResultSet resultSet;
+        List<User> result = new ArrayList<>();
+
+        try {
+            PreparedStatement prepare = this.conn.prepareStatement("SELECT * FROM users WHERE user_id = ?;");
+            prepare.setInt(1, id);
+            resultSet = prepare.executeQuery();
+
+            if (resultSet == null) {
+                return result;
+            }
+            result = Mapper.dataToModelUser(resultSet);
+        } catch (SQLException ex) {
+            Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return result;
     }
 }

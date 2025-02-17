@@ -11,7 +11,7 @@ import java.time.LocalTime;
  *
  * @author geova
  */
-public class AlertCard {
+public class AlertCard implements IAlert {
 
     private int alertId;
     private String description;
@@ -21,8 +21,19 @@ public class AlertCard {
     private String card_code;
     private byte attempt;
 
-    public AlertCard(int alertId, String description, String alertLevel, LocalTime hour, LocalDate date, String card_code, byte attempt) {
+    public AlertCard(int alertId, String description, String alertLevel, LocalTime hour, LocalDate date,
+            String card_code, byte attempt) {
         this.alertId = alertId;
+        this.description = description;
+        this.alertLevel = alertLevel;
+        this.hour = hour;
+        this.date = date;
+        this.card_code = card_code;
+        this.attempt = attempt;
+    }
+
+    public AlertCard(String description, String alertLevel, LocalTime hour, LocalDate date, String card_code,
+            byte attempt) {
         this.description = description;
         this.alertLevel = alertLevel;
         this.hour = hour;
@@ -58,6 +69,18 @@ public class AlertCard {
     public byte getAttempt() {
         return attempt;
     }
-    
-    
+
+    @Override
+    public String getHeader() {
+        return "Alerta por Tarjeta nivel: " + alertLevel;
+    }
+
+    public String getMsg() {
+        if (attempt >= 3) {
+            return "Han Activado el sistema de aleta mediante la tarjeta " + card_code + " por " + attempt + " intentos";
+
+        }
+        return "Han intentado ingresar mediante la tarjeta " + card_code + " " + attempt + " intentos";
+    }
+
 }

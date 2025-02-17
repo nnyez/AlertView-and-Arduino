@@ -24,6 +24,7 @@ import models.panels.IFilterPanel;
 import models.panels.SearchDate;
 import models.panels.SearchFilter;
 import repositories.AlertRepository;
+import repositories.MailAddressRepository;
 import views.MainView;
 import views.panels.AlertLevelPanel;
 import views.panels.AttemptPanel;
@@ -216,8 +217,10 @@ public class MainController {
     }
 
     public static void main(String[] args) throws ArduinoException, SerialPortException, SQLException {
-
-        new MainController(new MainView(), new AlertRepository());
+        AlertRepository repository = new AlertRepository();
+        MailAddressRepository mailRepository = new MailAddressRepository();
+        new ConRXTX(repository, mailRepository);
+        new MainController(new MainView(),repository);
     }
 
 }

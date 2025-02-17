@@ -14,12 +14,36 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import models.AlertCard;
 import models.AlertPassword;
+import models.User;
 
 /**
  *
  * @author geova
  */
 public class Mapper {
+    
+    //Inserto el resultado de una consulta en una lista User
+    public static List<User> dataToModelUser(ResultSet set) throws SQLException {
+        List<User> result = new ArrayList<>();
+        while (set.next()) {
+            result.add(dataToUser(set));
+        }
+        return result;
+    }
+
+    //Inserta los valores de la consulta en un modelo User
+    private static User dataToUser(ResultSet set) throws SQLException {
+
+        int id = set.getInt("user_id");
+        String name = set.getString("name");
+        String lastname = set.getString("last_name");
+        String mail = set.getString("mail");
+        String password = set.getString("password");
+        String card_code = set.getString("card_code");
+
+        return new User(id, name, lastname, mail, password, card_code);
+
+    }
 
     //Obtener plantilla para la visualizacion en la tabla sobre AlertCards
     public static DefaultTableModel getTableCardModel() {
@@ -51,27 +75,27 @@ public class Mapper {
         }
     }
 
-        //Inserto el resultado de una consulta en una lista AlertCard
-        public static List<AlertCard> dataToModelCard(ResultSet set) throws SQLException {
-            List<AlertCard> result = new ArrayList<>();
-            while (set.next()) {
-                result.add(dataToCard(set));
-            }
-            return result;
+    //Inserto el resultado de una consulta en una lista AlertCard
+    public static List<AlertCard> dataToModelCard(ResultSet set) throws SQLException {
+        List<AlertCard> result = new ArrayList<>();
+        while (set.next()) {
+            result.add(dataToCard(set));
         }
+        return result;
+    }
 
-        //Inserta los valores de la consulta en un modelo AlertCard
-        private static AlertCard dataToCard(ResultSet set) throws SQLException {
-            String description = set.getString("description");
-            String alertLevel = set.getString("alert_level");
-            String hour = set.getString("hour");
-            String date = set.getString("date");
-            String code = set.getString("card_code");
-            byte attempt = set.getByte("attempt");
-            int id = set.getInt("alert_card_id");
+    //Inserta los valores de la consulta en un modelo AlertCard
+    private static AlertCard dataToCard(ResultSet set) throws SQLException {
+        String description = set.getString("description");
+        String alertLevel = set.getString("alert_level");
+        String hour = set.getString("hour");
+        String date = set.getString("date");
+        String code = set.getString("card_code");
+        byte attempt = set.getByte("attempt");
+        int id = set.getInt("alert_card_id");
 
-            return new AlertCard(id, description, alertLevel, LocalTime.parse(hour), LocalDate.parse(date), code, attempt);
-        }
+        return new AlertCard(id, description, alertLevel, LocalTime.parse(hour), LocalDate.parse(date), code, attempt);
+    }
 
     //Obtener plantilla para la visualizacion en la tabla sobre AlertPass
     public static DefaultTableModel getPassTableModel() {

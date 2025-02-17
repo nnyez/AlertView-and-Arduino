@@ -11,7 +11,7 @@ import java.time.LocalTime;
  *
  * @author geova
  */
-public class AlertPassword {
+public class AlertPassword implements IAlert {
 
     private int alertId;
     private String description;
@@ -21,8 +21,19 @@ public class AlertPassword {
     private String password;
     private byte attempt;
 
-    public AlertPassword(int alertId, String description, String alertLevel, LocalTime hour, LocalDate date, String password, byte attempt) {
+    public AlertPassword(int alertId, String description, String alertLevel, LocalTime hour, LocalDate date,
+            String password, byte attempt) {
         this.alertId = alertId;
+        this.description = description;
+        this.alertLevel = alertLevel;
+        this.hour = hour;
+        this.date = date;
+        this.password = password;
+        this.attempt = attempt;
+    }
+
+    public AlertPassword(String description, String alertLevel, LocalTime hour, LocalDate date, String password,
+            byte attempt) {
         this.description = description;
         this.alertLevel = alertLevel;
         this.hour = hour;
@@ -59,4 +70,17 @@ public class AlertPassword {
         return attempt;
     }
 
+    @Override
+    public String getHeader() {
+        return "Alerta por Contraseña Numerica nivel: " + alertLevel;
+    }
+
+    @Override
+    public String getMsg() {
+        if (attempt >= 3) {
+            return "Han Activado el sistema de aleta mediante la contraseña " + password + " por " + attempt + " intentos";
+
+        }
+        return "Han intentado ingresar mediante el pin " + password + " " + attempt + " intentos";
+    }
 }

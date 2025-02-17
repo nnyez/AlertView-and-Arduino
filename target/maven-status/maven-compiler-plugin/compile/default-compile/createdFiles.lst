@@ -1,6 +1,5 @@
 repositories\AlertRepository.class
 models\AlertPassword.class
-controllers\DriverController.class
 models\User.class
 models\AlertCard.class
 views\MainView.class
